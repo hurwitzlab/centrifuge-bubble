@@ -1,0 +1,84 @@
+{
+    "available": true,
+    "checkpointable": false,
+    "defaultMemoryPerNode": 32,
+    "defaultProcessorsPerNode": 16,
+    "defaultMaxRunTime": "12:00:00",
+    "defaultNodeCount": 1,
+    "defaultQueue": "serial",
+    "deploymentPath": "kyclark/applications/centrifuge-bubble-0.0.1/stampede",
+    "deploymentSystem": "data.iplantcollaborative.org",
+    "executionSystem": "tacc-stampede-kyclark",
+    "executionType": "HPC",
+    "helpURI": "",
+    "label": "Centrifuge Bubble",
+    "longDescription": "Centrifuge Bubble",
+    "modules": [],
+    "name": "centrifuge-bubble",
+    "ontology": ["http://sswapmeet.sswap.info/agave/apps/Application"],
+    "parallelism": "SERIAL",
+    "shortDescription": "Create bubble plot from Centrifuge classification",
+    "templatePath": "template.sh",
+    "testPath": "test.sh",
+    "version": "0.0.1",
+    "inputs": [
+      {
+        "id": "CENTRIFUGE_DIR",
+        "value": {
+            "default": "",
+            "order": 0,
+            "required": true,
+            "validator": "",
+            "visible": true
+        },
+        "semantics": {
+            "ontology": ["http://sswapmeet.sswap.info/mime/application/X-bam"],
+            "minCardinality": 1,
+            "fileTypes": ["raw-0"]
+        },
+        "details": {
+            "description": "",
+            "label": "Centrifuge dir (TSV files)",
+            "argument": "",
+            "showArgument": true
+        }
+      }
+    ],
+    "parameters": [
+       {
+        "id": "TITLE",
+        "value": {
+            "type": "string",
+            "default": "Bubble Plot",
+            "order": 1,
+            "required": false,
+            "validator": "",
+            "visible": true
+        },
+        "details": {
+            "description": "Title of the plot",
+            "label": "Title",
+            "argument": "",
+            "showArgument": true
+        }
+      }, 
+      {
+        "id": "EXCLUDE_SPECIES",
+        "value": {
+            "type": "string",
+            "default": "",
+            "order": 2,
+            "required": false,
+            "validator": "",
+            "visible": true
+        },
+        "details": {
+            "description": "Comma-separated list of species to exclude",
+            "label": "Exclude species",
+            "argument": "",
+            "showArgument": true
+        }
+      }
+    ],
+    "outputs": []
+}

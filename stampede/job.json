@@ -1,0 +1,12 @@
+{
+  "name": "cbubble-test",
+  "appId": "centrifuge-bubble-0.0.1",
+  "archive": true,
+  "inputs": {
+    "CENTRIFUGE_DIR": "agave://data.iplantcollaborative.org/kyclark/data/centrifuge/pov",
+    "TITLE": "",
+    "EXCLUDE_SPECIES": ""
+  },
+  "parameter": {
+  }
+}
