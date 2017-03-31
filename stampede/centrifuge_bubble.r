@@ -51,7 +51,7 @@ option_list = list(
 opt_parser = OptionParser(option_list = option_list);
 opt        = parse_args(opt_parser);
 cent.dir   = opt$dir
-out.dir    = opt$outdir
+out.dir    = normalizePath(opt$outdir)
 file_name  = opt$outfile
 plot_title = opt$title
 exclude    = unlist(strsplit(opt$exclude,"[[:space:]]*,[[:space:]]*"))
@@ -65,15 +65,19 @@ if (!dir.exists(cent.dir)) {
 }
 
 setwd(cent.dir)
+tsv_files = list.files(pattern=glob2rx("*.tsv"), recursive=F)
+
+if (length(tsv_files) == 0) {
+  stop(paste("Found no *.tsv files in ", cent.dir))
+}
 
 if (!dir.exists(out.dir)) {
   printf("Creating outdir '%s'\n", out.dir)
   dir.create(out.dir)
 }
 
-temp         = list.files(pattern=glob2rx("*.tsv"), recursive=F)
-myfiles      = lapply(temp, read.delim)
-sample_names = as.list(sub(".tsv", "", temp))
+myfiles      = lapply(tsv_files, read.delim)
+sample_names = as.list(sub(".tsv", "", tsv_files))
 myfiles      = Map(cbind, myfiles, sample = sample_names)
 
 #
