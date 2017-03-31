@@ -18,7 +18,7 @@
     "ontology": ["http://sswapmeet.sswap.info/agave/apps/Application"],
     "parallelism": "SERIAL",
     "shortDescription": "Create bubble plot from Centrifuge classification",
-    "templatePath": "template.sh",
+    "templatePath": "centrifuge_bubble.r",
     "testPath": "test.sh",
     "version": "0.0.1",
     "inputs": [
@@ -39,7 +39,7 @@
         "details": {
             "description": "",
             "label": "Centrifuge dir (TSV files)",
-            "argument": "",
+            "argument": "-d",
             "showArgument": true
         }
       }
@@ -58,7 +58,7 @@
         "details": {
             "description": "Title of the plot",
             "label": "Title",
-            "argument": "",
+            "argument": "-t",
             "showArgument": true
         }
       }, 
@@ -75,7 +75,7 @@
         "details": {
             "description": "Comma-separated list of species to exclude",
             "label": "Exclude species",
-            "argument": "",
+            "argument": "-e",
             "showArgument": true
         }
       }
