@@ -60,6 +60,10 @@ exclude    = unlist(strsplit(opt$exclude,"[[:space:]]*,[[:space:]]*"))
 # SETWD: Location of centrifuge_report.tsv files. 
 # Should all be in same directory
 #
+if (nchar(cent.dir) == 0) {
+  stop("--dir is required");
+}
+
 if (!dir.exists(cent.dir)) {
   stop(paste("Bad centrifuge directory: ", cent.dir))
 }

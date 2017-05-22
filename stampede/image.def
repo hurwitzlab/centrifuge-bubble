@@ -1,0 +1,17 @@
+Bootstrap: docker
+From: r-base:latest
+
+%runscript
+
+    exec /usr/local/bubble/stampede/centrifuge-buggle.r "$@"
+
+%post
+
+    apt-get update
+    apt-get install -y git
+    mkdir /home1
+    mkdir /work
+    mkdir /scratch
+    mkdir /data
+    git clone https://github.com/hurwitzlab/stampede-centrifuge-bubble.git /usr/local/bubble
+    Rscript /usr/local/bubble/install.R
