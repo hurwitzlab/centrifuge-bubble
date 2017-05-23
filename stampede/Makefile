@@ -26,14 +26,18 @@ jobs-submit:
 
 img:
 	rm -f $(IMAGE_NAME)
-	sudo $(SINGULARITY) create --size 4000 $(IMAGE_NAME)
+	sudo $(SINGULARITY) create --size 2000 $(IMAGE_NAME)
 	sudo $(SINGULARITY) bootstrap $(IMAGE_NAME) image.def
 
 run:
 	$(SINGULARITY) run $(IMAGE_NAME)
 
 shell:
-	sudo $(SINGULARITY) shell --writable -B $(PWD):/usr/local -s /bin/bash $(IMAGE_NAME) 
+	sudo $(SINGULARITY) shell --writable -s /bin/bash $(IMAGE_NAME) 
+	#sudo $(SINGULARITY) shell --writable -B $(PWD):/data -s /bin/bash $(IMAGE_NAME) 
 
 stest:
-	$(SINGULARITY) run -B test:/data $(IMAGE_NAME) -d /data/test/reports -o /data/out -e "Homo sapiens, synthetic construct" -t "Pacific Ocean Virome"
+	$(SINGULARITY) run -B $(PWD)/test:/data $(IMAGE_NAME) -d /data/reports -o /data/out -e "Homo sapiens, synthetic construct" -t "Pacific Ocean Virome"
+
+scp:
+	scp $(IMAGE_NAME) stampede:/work/03137/kyclark/$(APP)/stampede
