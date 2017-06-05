@@ -6,8 +6,9 @@ IMAGE_NAME = $(APP).img
 clean:
 	find . \( -name \*.out -o -name \*.param \) -exec rm {} \;
 
-upload: clean
-	files-upload -F $(WORK)/$(APP) kyclark/applications
+up: clean
+	copy-from-manifest.pl6 $(WORK)/$(APP)
+#	files-upload -F $(WORK)/$(APP) kyclark/applications
 
 app:
 	apps-addupdate -F app.json
@@ -37,7 +38,7 @@ shell:
 	#sudo $(SINGULARITY) shell --writable -B $(PWD):/data -s /bin/bash $(IMAGE_NAME) 
 
 stest:
-	$(SINGULARITY) run -B $(PWD)/test:/data $(IMAGE_NAME) -d /data/reports -o /data/out -e "Homo sapiens, synthetic construct" -t "Pacific Ocean Virome"
+	run.sh -d test/reports -o test -e "Homo sapiens, synthetic construct" -t "Pacific Ocean Virome"
 
 scp:
 	scp $(IMAGE_NAME) stampede:/work/03137/kyclark/$(APP)/stampede
