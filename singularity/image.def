@@ -1,0 +1,40 @@
+BootStrap: docker
+From: ubuntu:latest
+
+%runscript
+    exec /usr/bin/Rscript /app/bubble/stampede/centrifuge_bubble.r "$@"
+
+%post
+    apt-get update
+    apt-get install -y git locales
+    locale-gen en_US.UTF-8
+
+    #
+    # Add CRAN to sources to get latest R
+    #
+    gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9
+    gpg -a --export E084DAB9 | apt-key add -
+    echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial/" | \
+        tee -a /etc/apt/sources.list
+    apt-get install -y r-base r-base-dev
+
+    #
+    # Put everything into $APP_DIR
+    #
+    export APP_DIR=/app
+    mkdir -p $APP_DIR
+    cd $APP_DIR
+
+    git clone https://github.com/hurwitzlab/stampede-centrifuge-bubble.git bubble
+    cat << EOF > .Rprofile
+local({
+  r = getOption("repos")
+  r["CRAN"] = "http://mirrors.nics.utk.edu/cran/"
+  options(repos = r)
+})
+EOF
+    /usr/bin/Rscript /app/bubble/stampede/install.R
+
+    mkdir /home1
+    mkdir /work
+    mkdir /scratch
