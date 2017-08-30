@@ -29,15 +29,22 @@ option_list = list(
     c("-o", "--outdir"),
     default = file.path(getwd(), "plots"),
     type = "character",
-    help = "out directory",
+    help = "Out directory",
     metavar = "character"
   ),
   make_option(
     c("-f", "--outfile"),
     default = 'bubble',
     type = "character",
-    help = "out file",
+    help = "Out file",
     metavar = "character"
+  ),
+  make_option(
+    c("-p", "--proportion"),
+    default = 0.02,
+    type = "double",
+    help = "Minimum proportion",
+    metavar = "float"
   ),
   make_option(
     c("-t", "--title"),
@@ -54,6 +61,7 @@ cent.dir   = opt$dir
 out.dir    = normalizePath(opt$outdir)
 file_name  = opt$outfile
 plot_title = opt$title
+min_prop   = opt$proportion
 exclude    = unlist(strsplit(opt$exclude,"[[:space:]]*,[[:space:]]*"))
 
 #
@@ -96,15 +104,17 @@ for (i in exclude) {
 # is divided by total "Unique Reads"
 #
 props = lapply(myfiles, function(x) { 
-  x$proportion <- (x$numUniqueReads / sum(x$numUniqueReads))
-  return(x[,c("name","proportion","sample")])
+  x$proportion <- ((x$numUniqueReads / sum(x$numUniqueReads)) * 100)
+  x$abundance <- x$abundance * 100
+  x$hitratio <- x$numUniqueReads / x$numReads
+  return(x[,c("name","proportion", "abundance", "genomeSize", "sample", "numReads", "numUniqueReads", "taxID", "hitratio")])
 })
 
 #
 # Final dataframe created for plotting,
 # can change proportion value (Default 1%)
 #
-final     = llply(props, subset, proportion > 0.02)
+final     = llply(props, subset, proportion > min_prop)
 df        = ldply(final, data.frame)
 names(df) = c("x", "Proportion", "z")
 
