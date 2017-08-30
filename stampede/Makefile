@@ -1,4 +1,4 @@
-APP = centrifuge-bubble-0.0.1
+APP = centrifuge-bubble-0.0.2
 EMAIL = kyclark@email.arizona.edu
 SINGULARITY = /usr/local/bin/singularity
 IMAGE_NAME = $(APP).img
@@ -38,7 +38,7 @@ shell:
 	#sudo $(SINGULARITY) shell --writable -B $(PWD):/data -s /bin/bash $(IMAGE_NAME) 
 
 stest:
-	run.sh -d test/reports -o test -e "Homo sapiens, synthetic construct" -t "Pacific Ocean Virome"
+	run.sh -d test/reports -o test-out -e "Homo sapiens, synthetic construct" -t "Pacific Ocean Virome"
 
 scp:
 	scp $(IMAGE_NAME) stampede:/work/03137/kyclark/$(APP)/stampede

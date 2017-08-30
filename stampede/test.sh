@@ -11,4 +11,4 @@
 
 #./centrifuge_bubble.r -d $SCRATCH/centrifuge/test/reports/ -o $SCRATCH/centrifuge-bubble-out -e "Homo sapiens, synthetic construct" -t "Pacific Ocean Virome"
 
-singularity run -B $SCRATCH/centrifuge/test:/data centrifuge-bubble-0.0.1.img -d /data/reports -o /data/out -e "Homo sapiens, synthetic construct" -t "Pacific Ocean Virome"
+singularity run -B $SCRATCH/centrifuge/test:/data centrifuge-bubble-0.0.2.img -d /data/reports -o /data/out -e "Homo sapiens, synthetic construct" -t "Pacific Ocean Virome"

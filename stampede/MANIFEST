@@ -1,3 +1,4 @@
 ./template.sh
-./centrifuge-bubble-0.0.1.img
+./centrifuge-bubble-0.0.2.img.xz
 ./test.sh
+./run.sh
