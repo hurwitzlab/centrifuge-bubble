@@ -1,8 +1,11 @@
 BootStrap: docker
 From: ubuntu:latest
 
+%environment
+    PATH=/app/bubble/scripts:$PATH
+
 %runscript
-    exec /usr/bin/Rscript /app/bubble/stampede/centrifuge_bubble.r "$@"
+    exec /usr/bin/Rscript /app/bubble/scripts/centrifuge_bubble.r "$@"
 
 %post
     apt-get update
@@ -25,7 +28,7 @@ From: ubuntu:latest
     mkdir -p $APP_DIR
     cd $APP_DIR
 
-    git clone https://github.com/hurwitzlab/stampede-centrifuge-bubble.git bubble
+    git clone https://github.com/hurwitzlab/centrifuge-bubble.git bubble
     cat << EOF > .Rprofile
 local({
   r = getOption("repos")
@@ -33,7 +36,7 @@ local({
   options(repos = r)
 })
 EOF
-    /usr/bin/Rscript /app/bubble/stampede/install.R
+    /usr/bin/Rscript /app/bubble/scripts/install.r
 
     mkdir /home1
     mkdir /work
