@@ -123,16 +123,22 @@ num_orgs  = nrow(df)
 printf("At a proportion of %s, %s sample%s were included.\n",
        min_prop, num_orgs, if (num_orgs==1) '' else 's')
 
+max_orgs = 3000
+if (num_orgs > max_orgs) {
+    printf("That is too many (max %s), I have to trim it down\n", max_orgs)
+    df = df[1:max_orgs,]
+}
+
+extra_rows = nrow(df)
+height = 800
+if (extra_rows > 0) {
+  height = height + (extra_rows * 10)
+}
+
 width = 800
 extra_samples = num_samples - 10
 if (extra_samples > 0) {
     width = width + (extra_samples * 10)
-}
-
-height = 800
-extra_rows = nrow(df) - 10
-if (extra_rows > 0) {
-  height = height + (extra_rows * 10)
 }
 
 png(filename=file.path(out.dir, paste0(file_name, ".png")), width = width, height = height)
