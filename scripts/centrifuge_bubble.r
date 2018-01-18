@@ -127,6 +127,8 @@ max_orgs = 3000
 if (num_orgs > max_orgs) {
     printf("That is too many (max %s), I have to trim it down\n", max_orgs)
     df = df[1:max_orgs,]
+} else if (num_orgs == 0) {
+    stop("There is nothing to show")
 }
 
 extra_rows = nrow(df)
