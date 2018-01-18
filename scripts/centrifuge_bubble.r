@@ -118,6 +118,10 @@ props = lapply(myfiles, function(x) {
 final     = llply(props, subset, proportion > min_prop)
 df        = ldply(final, data.frame)
 names(df) = c("x", "Proportion", "z")
+num_orgs  = nrow(df)
+
+printf("At a proportion of %s, %s sample%s were included.\n",
+       min_prop, num_orgs, if (num_orgs==1) '' else 's')
 
 width = 800
 extra_samples = num_samples - 10
@@ -131,7 +135,6 @@ if (extra_rows > 0) {
   height = height + (extra_rows * 10)
 }
 
-options(bitmapType='cairo')
 png(filename=file.path(out.dir, paste0(file_name, ".png")), width = width, height = height)
 p2 = ggplot(df, aes(as.factor(z), as.factor(x))) + geom_point(aes(size = Proportion))
 p2 = p2 + theme(text = element_text(size=20), axis.text.x = element_text(angle = 90, hjust = 1))
