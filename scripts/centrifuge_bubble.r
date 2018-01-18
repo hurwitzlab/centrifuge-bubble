@@ -58,7 +58,7 @@ option_list = list(
 opt_parser = OptionParser(option_list = option_list);
 opt        = parse_args(opt_parser);
 cent.dir   = opt$dir
-out.dir    = normalizePath(opt$outdir)
+out.dir    = opt$outdir
 file_name  = opt$outfile
 plot_title = opt$title
 min_prop   = opt$proportion
