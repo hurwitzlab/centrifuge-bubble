@@ -1,12 +1,13 @@
 {
   "name": "cbubble-test",
-  "appId": "centrifuge-bubble-0.0.1",
+  "appId": "centrifuge-bubble-0.0.3",
   "archive": true,
   "inputs": {
-    "CENTRIFUGE_DIR": "agave://data.iplantcollaborative.org/kyclark/data/dolphin/reports"
+    "CENTRIFUGE_DIR": "kyclark/data/dolphin/reports"
   },
   "parameter": {
     "TITLE": "\"Dolphin Blowhole\"",
-    "EXCLUDE_SPECIES": "\"Homo sapiens, synthetic construct\""
+    "EXCLUDE_SPECIES": "\"Homo sapiens, synthetic construct\"",
+    "MIN_PROPORTION": "1.5"
   }
 }

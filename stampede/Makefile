@@ -1,12 +1,13 @@
-APP = centrifuge-bubble-0.0.2
+.PHONY: clean up app test job jobs-template jobs-submit stest
+
+APP = centrifuge-bubble-0.0.3
 EMAIL = kyclark@email.arizona.edu
 
 clean:
 	find . \( -name \*.out -o -name \*.param \) -exec rm {} \;
 
 up: clean
-	copy-from-manifest.pl6 $(WORK)/$(APP)
-#	files-upload -F $(WORK)/$(APP) kyclark/applications
+	copy_from_manifest.py
 
 app:
 	apps-addupdate -F app.json
@@ -25,4 +26,3 @@ jobs-submit:
 
 stest:
 	run.sh -d test/reports -o test-out -e "Homo sapiens, synthetic construct" -t "Pacific Ocean Virome"
-

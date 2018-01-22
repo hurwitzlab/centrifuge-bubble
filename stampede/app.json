@@ -5,22 +5,22 @@
     "defaultProcessorsPerNode": 16,
     "defaultMaxRunTime": "12:00:00",
     "defaultNodeCount": 1,
-    "defaultQueue": "serial",
-    "deploymentPath": "kyclark/applications/centrifuge-bubble-0.0.2/stampede",
+    "defaultQueue": "normal",
+    "deploymentPath": "kyclark/applications/centrifuge-bubble-0.0.3/stampede",
     "deploymentSystem": "data.iplantcollaborative.org",
-    "executionSystem": "tacc-stampede-kyclark",
+    "executionSystem": "tacc-stampede2-kyclark",
     "executionType": "HPC",
     "helpURI": "",
     "label": "Centrifuge Bubble",
     "shortDescription": "Centrifuge Bubble",
     "longDescription": "Create bubble plot from Centrifuge classification",
-    "modules": [],
+    "modules": ["load singularity"],
     "name": "centrifuge-bubble",
     "ontology": ["http://sswapmeet.sswap.info/agave/apps/Application"],
     "parallelism": "SERIAL",
     "templatePath": "template.sh",
     "testPath": "test.sh",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "inputs": [
       {
         "id": "CENTRIFUGE_DIR",
@@ -76,6 +76,23 @@
             "description": "Comma-separated list of species to exclude",
             "label": "Exclude species",
             "argument": "-e ",
+            "showArgument": true
+        }
+      }, 
+      {
+        "id": "MIN_PROPORTION",
+        "value": {
+            "type": "string",
+            "default": "0.02",
+            "order": 3,
+            "required": false,
+            "validator": "",
+            "visible": true
+        },
+        "details": {
+            "description": "Minimum proportion to be included",
+            "label": "Min. proportion",
+            "argument": "-p ",
             "showArgument": true
         }
       }
