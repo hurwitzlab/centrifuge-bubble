@@ -58,7 +58,7 @@ option_list = list(
 opt_parser = OptionParser(option_list = option_list);
 opt        = parse_args(opt_parser);
 cent.dir   = opt$dir
-out.dir    = normalizePath(opt$outdir)
+out.dir    = opt$outdir
 file_name  = opt$outfile
 plot_title = opt$title
 min_prop   = opt$proportion
@@ -90,6 +90,7 @@ if (!dir.exists(out.dir)) {
 
 myfiles      = lapply(tsv_files, read.delim)
 sample_names = as.list(sub(".tsv", "", tsv_files))
+num_samples  = length(sample_names)
 myfiles      = Map(cbind, myfiles, sample = sample_names)
 
 #
@@ -117,9 +118,32 @@ props = lapply(myfiles, function(x) {
 final     = llply(props, subset, proportion > min_prop)
 df        = ldply(final, data.frame)
 names(df) = c("x", "Proportion", "z")
+num_orgs  = nrow(df)
 
-options(bitmapType='cairo')
-png(filename=file.path(out.dir, paste0(file_name,".png")), width = 800, height = 800)
+printf("At a proportion of %s, %s sample%s were included.\n",
+       min_prop, num_orgs, if (num_orgs==1) '' else 's')
+
+max_orgs = 3000
+if (num_orgs > max_orgs) {
+    printf("That is too many (max %s), I have to trim it down\n", max_orgs)
+    df = df[1:max_orgs,]
+} else if (num_orgs == 0) {
+    stop("There is nothing to show")
+}
+
+extra_rows = nrow(df)
+height = 800
+if (extra_rows > 0) {
+  height = height + (extra_rows * 10)
+}
+
+width = 800
+extra_samples = num_samples - 10
+if (extra_samples > 0) {
+    width = width + (extra_samples * 10)
+}
+
+png(filename=file.path(out.dir, paste0(file_name, ".png")), width = width, height = height)
 p2 = ggplot(df, aes(as.factor(z), as.factor(x))) + geom_point(aes(size = Proportion))
 p2 = p2 + theme(text = element_text(size=20), axis.text.x = element_text(angle = 90, hjust = 1))
 p2 = p2 + labs(y = "Organism", x = "Sample")
