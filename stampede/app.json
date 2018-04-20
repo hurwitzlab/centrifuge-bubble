@@ -1,4 +1,8 @@
 {
+    "name": "centrifuge-bubble",
+    "version": "0.0.4",
+    "shortDescription": "Create bubble plot from Centrifuge classification.",
+    "longDescription": "Centrifuge provides fast classification of short reads. Use the .tsv output files to create a bubble chart showing relative species abundance across any number of samples.",
     "available": true,
     "checkpointable": false,
     "defaultMemoryPerNode": 32,
@@ -12,90 +16,104 @@
     "executionType": "HPC",
     "helpURI": "",
     "label": "Centrifuge Bubble",
-    "shortDescription": "Centrifuge Bubble",
-    "longDescription": "Create bubble plot from Centrifuge classification",
-    "modules": ["load tacc-singularity"],
-    "name": "centrifuge-bubble",
-    "ontology": ["http://sswapmeet.sswap.info/agave/apps/Application"],
     "parallelism": "SERIAL",
     "templatePath": "template.sh",
     "testPath": "test.sh",
-    "version": "0.0.4",
+    "modules": [
+        "load tacc-singularity"
+    ],
+    "tags": [],
+    "ontology": [
+        "http://sswapmeet.sswap.info/agave/apps/Application"
+    ],
     "inputs": [
-      {
-        "id": "CENTRIFUGE_DIR",
-        "value": {
-            "default": "",
-            "order": 0,
-            "required": true,
-            "validator": "",
-            "visible": true
-        },
-        "semantics": {
-            "ontology": ["http://sswapmeet.sswap.info/mime/application/X-bam"],
-            "minCardinality": 1,
-            "fileTypes": ["raw-0"]
-        },
-        "details": {
-            "description": "",
-            "label": "Centrifuge dir (TSV files)",
-            "argument": "-d ",
-            "showArgument": true
+        {
+            "id": "CENTRIFUGE_DIR",
+            "value": {
+                "default": "",
+                "order": 0,
+                "validator": "",
+                "required": true,
+                "visible": true,
+                "enquote": false
+            },
+            "semantics": {
+                "ontology": [
+                    "http://sswapmeet.sswap.info/mime/application/X-bam"
+                ],
+                "minCardinality": 1,
+                "maxCardinality": -1,
+                "fileTypes": [
+                    "raw-0"
+                ]
+            },
+            "details": {
+                "description": "",
+                "label": "Centrifuge dir (TSV files)",
+                "argument": "-d ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
         }
-      }
     ],
     "parameters": [
-       {
-        "id": "TITLE",
-        "value": {
-            "type": "string",
-            "default": "Bubble Plot",
-            "order": 1,
-            "required": false,
-            "validator": "",
-            "visible": true
+        {
+            "id": "TITLE",
+            "value": {
+                "default": "Bubble Plot",
+                "type": "string",
+                "order": 1,
+                "required": false,
+                "visible": true,
+                "enquote": true,
+                "validator": ""
+            },
+            "details": {
+                "description": "Title of the plot",
+                "label": "Title",
+                "argument": "-t ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
         },
-        "details": {
-            "description": "Title of the plot",
-            "label": "Title",
-            "argument": "-t ",
-            "showArgument": true
-        }
-      }, 
-      {
-        "id": "EXCLUDE_SPECIES",
-        "value": {
-            "type": "string",
-            "default": "",
-            "order": 2,
-            "required": false,
-            "validator": "",
-            "visible": true
+        {
+            "id": "EXCLUDE_SPECIES",
+            "value": {
+                "default": "",
+                "type": "string",
+                "order": 2,
+                "required": false,
+                "visible": true,
+                "enquote": true,
+                "validator": ""
+            },
+            "details": {
+                "description": "Comma-separated list of species to exclude",
+                "label": "Exclude species",
+                "argument": "-e ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
         },
-        "details": {
-            "description": "Comma-separated list of species to exclude",
-            "label": "Exclude species",
-            "argument": "-e ",
-            "showArgument": true
+        {
+            "id": "MIN_PROPORTION",
+            "value": {
+                "default": "0.02",
+                "type": "string",
+                "order": 3,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Minimum proportion to be included",
+                "label": "Min. proportion",
+                "argument": "-p ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
         }
-      }, 
-      {
-        "id": "MIN_PROPORTION",
-        "value": {
-            "type": "string",
-            "default": "0.02",
-            "order": 3,
-            "required": false,
-            "validator": "",
-            "visible": true
-        },
-        "details": {
-            "description": "Minimum proportion to be included",
-            "label": "Min. proportion",
-            "argument": "-p ",
-            "showArgument": true
-        }
-      }
     ],
     "outputs": []
 }
