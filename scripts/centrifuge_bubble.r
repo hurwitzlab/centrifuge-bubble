@@ -3,10 +3,10 @@
 # Authors: Jimmy Thornton <jamesthornton@email.arizona.edu>,
 #          Ken Youens-Clark <kyclark@email.arizona.edu>
 
-library("optparse")
-library("plyr")
-library("ggplot2")
-library("R.utils")
+suppressMessages(library("optparse"))
+suppressMessages(library("plyr"))
+suppressMessages(library("ggplot2"))
+suppressMessages(library("R.utils"))
 
 args = commandArgs(trailingOnly=TRUE)
 
@@ -55,14 +55,21 @@ option_list = list(
   )
 );
 
-opt_parser = OptionParser(option_list = option_list);
-opt        = parse_args(opt_parser);
+opt.parser = OptionParser(option_list = option_list);
+opt        = parse_args(opt.parser);
 cent.dir   = opt$dir
 out.dir    = opt$outdir
-file_name  = opt$outfile
-plot_title = opt$title
-min_prop   = opt$proportion
+file.name  = opt$outfile
+plot.title = opt$title
+min.prop   = opt$proportion
 exclude    = unlist(strsplit(opt$exclude,"[[:space:]]*,[[:space:]]*"))
+
+cent.dir = "~/work/data/dolphin/reports"
+out.dir = "~/work/imicrobe/centrifuge-bubble/scripts/plots"
+file.name = "bubble"
+plot.title = "bubble"
+min.prop = 0.02
+exclude = unlist(strsplit("Nectarine virus M,synthetic construct","[[:space:]]*,[[:space:]]*"))
 
 #
 # SETWD: Location of centrifuge_report.tsv files. 
@@ -76,11 +83,17 @@ if (!dir.exists(cent.dir)) {
   stop(paste("Bad centrifuge directory: ", cent.dir))
 }
 
-setwd(cent.dir)
-tsv_files = list.files(pattern=glob2rx("*.tsv"), recursive=F)
+if (min.prop > 1) {
+  min.prop = min.prop / 100
+}
 
-if (length(tsv_files) == 0) {
+tsv.files = list.files(path = cent.dir, pattern = "*.tsv", full.names = T)
+num.files = length(tsv.files)
+
+if (num.files == 0) {
   stop(paste("Found no *.tsv files in ", cent.dir))
+} else {
+  printf("I found %s file%s\n", num.files, if (num.files==1) '' else 's')
 }
 
 if (!dir.exists(out.dir)) {
@@ -88,69 +101,70 @@ if (!dir.exists(out.dir)) {
   dir.create(out.dir)
 }
 
-myfiles      = lapply(tsv_files, read.delim)
-sample_names = as.list(sub(".tsv", "", tsv_files))
-num_samples  = length(sample_names)
-myfiles      = Map(cbind, myfiles, sample = sample_names)
+all.data     = lapply(tsv.files, read.delim)
+sample.names = as.list(sub(".tsv", "", Map(basename, tsv.files)))
+num.samples  = length(sample.names)
+all.data     = Map(cbind, all.data, sample = sample.names)
 
 #
 # Remove unwanted species
 #
-for (i in exclude) {
-  myfiles <- llply(myfiles, function(x)x[x$name!=i,])
+for (species.name in exclude) {
+  print(species.name)
+  all.data <- llply(all.data, function(x) { x[x$name != species.name,] })
 }
 
 #
 # Proportion calculations: Each species "Number of Unique Reads" 
 # is divided by total "Unique Reads"
 #
-props = lapply(myfiles, function(x) { 
-  x$proportion <- ((x$numUniqueReads / sum(x$numUniqueReads)) * 100)
-  x$abundance <- x$abundance * 100
-  x$hitratio <- x$numUniqueReads / x$numReads
-  return(x[,c("name","proportion", "abundance", "genomeSize", "sample", "numReads", "numUniqueReads", "taxID", "hitratio")])
+props = lapply(all.data, function(x) { 
+  x$proportion = x$numUniqueReads / sum(x$numUniqueReads)
+  return(x[, c("name", "proportion", "sample")])
 })
 
 #
 # Final dataframe created for plotting,
 # can change proportion value (Default 1%)
 #
-final     = llply(props, subset, proportion > min_prop)
-df        = ldply(final, data.frame)
-names(df) = c("x", "Proportion", "z")
-num_orgs  = nrow(df)
+final    = llply(props, subset, proportion > min.prop)
+df       = ldply(final, data.frame)
+num_orgs = nrow(df)
 
 printf("At a proportion of %s, %s sample%s were included.\n",
-       min_prop, num_orgs, if (num_orgs==1) '' else 's')
+       min.prop, num_orgs, if (num_orgs==1) '' else 's')
 
-max_orgs = 3000
+max_orgs = 1000
 if (num_orgs > max_orgs) {
-    printf("That is too many (max %s), I have to trim it down\n", max_orgs)
-    df = df[1:max_orgs,]
+  printf("That is too many (max %s), I have to trim it down\n", max_orgs)
+  df = df[1:max_orgs,]
 } else if (num_orgs == 0) {
-    stop("There is nothing to show")
+  stop("There is nothing to show")
 }
 
-extra_rows = nrow(df)
-height = 800
-if (extra_rows > 0) {
-  height = height + (extra_rows * 10)
+height = 7
+extra.rows = nrow(df) - 25
+if (extra.rows > 0) {
+  height = height + (extra.rows * .2)
 }
 
-width = 800
-extra_samples = num_samples - 10
-if (extra_samples > 0) {
-    width = width + (extra_samples * 10)
+width = 7
+extra.samples = num.samples - 5
+if (extra.samples > 0) {
+  width = width + (extra.samples * .6)
 }
 
-png(filename=file.path(out.dir, paste0(file_name, ".png")), width = width, height = height)
-p2 = ggplot(df, aes(as.factor(z), as.factor(x))) + geom_point(aes(size = Proportion))
-p2 = p2 + theme(text = element_text(size=20), axis.text.x = element_text(angle = 90, hjust = 1))
-p2 = p2 + labs(y = "Organism", x = "Sample")
-p2 = p2 + ggtitle(plot_title) + theme(plot.title = element_text(hjust = 0.5))
-p2 = p2 + guides(color=F)
-print(p2)
-dev.off()
+bplot = ggplot(df, aes(as.factor(sample), as.factor(name))) + 
+  geom_point(aes(size = proportion)) + 
+  labs(y = "Organism", x = "Sample") + 
+  ggtitle(plot.title) + 
+  guides(color = FALSE) +
+  theme(text = element_text(size=20), 
+        legend.position = "bottom",
+        axis.text.x = element_text(angle = 45, hjust = 1))
 
-write.csv(df, file = file.path(out.dir, paste0(file_name, ".csv")))
+ggsave(filename=file.path(out.dir, paste0(file.name, ".png")), plot=bplot, 
+       width = width, height = height, units="in")
+
+write.csv(df, file = file.path(out.dir, paste0(file.name, ".csv")))
 printf("Done, see %s\n", out.dir)
