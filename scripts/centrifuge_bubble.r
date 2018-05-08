@@ -103,7 +103,7 @@ all.data     = Map(cbind, all.data, sample = sample.names)
 # Remove unwanted species
 #
 for (species.name in exclude) {
-  print(species.name)
+  printf("Removing %s\n", species.name)
   all.data <- llply(all.data, function(x) { x[x$name != species.name,] })
 }
 
