@@ -9,16 +9,17 @@ From: ubuntu:latest
 
 %post
     apt-get update
-    apt-get install -y git locales
+    apt-get install -y git locales gpg
     locale-gen en_US.UTF-8
 
     #
     # Add CRAN to sources to get latest R
     #
-    gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9
-    gpg -a --export E084DAB9 | apt-key add -
-    echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial/" | \
-        tee -a /etc/apt/sources.list
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+    #gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9
+    #gpg -a --export E084DAB9 | apt-key add -
+    #echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial/" | \
+    #    tee -a /etc/apt/sources.list
     apt-get install -y r-base r-base-dev
 
     #

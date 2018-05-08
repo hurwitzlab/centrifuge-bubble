@@ -64,13 +64,6 @@ plot.title = opt$title
 min.prop   = opt$proportion
 exclude    = unlist(strsplit(opt$exclude,"[[:space:]]*,[[:space:]]*"))
 
-cent.dir = "~/work/data/dolphin/reports"
-out.dir = "~/work/imicrobe/centrifuge-bubble/scripts/plots"
-file.name = "bubble"
-plot.title = "bubble"
-min.prop = 0.02
-exclude = unlist(strsplit("Nectarine virus M,synthetic construct","[[:space:]]*,[[:space:]]*"))
-
 #
 # SETWD: Location of centrifuge_report.tsv files. 
 # Should all be in same directory

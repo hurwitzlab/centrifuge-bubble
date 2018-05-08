@@ -1,4 +1,4 @@
-APP = centrifuge-bubble-0.0.3
+APP = centrifuge-bubble-0.0.5
 SINGULARITY = /usr/local/bin/singularity
 SIZE = 1024
 IMAGE_NAME = $(APP).img
