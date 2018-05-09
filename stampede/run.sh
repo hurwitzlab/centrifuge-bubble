@@ -6,6 +6,6 @@ module load tacc-singularity
 
 set -u
 
-IMG="centrifuge-bubble-0.0.3.img"
+IMG="/work/05066/imicrobe/singularity/centrifuge-bubble-0.0.5.img"
 
 singularity run "$IMG" "$@"

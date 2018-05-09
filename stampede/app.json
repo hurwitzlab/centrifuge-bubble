@@ -1,6 +1,6 @@
 {
     "name": "centrifuge-bubble",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "shortDescription": "Create bubble plot from Centrifuge classification.",
     "longDescription": "Centrifuge provides fast classification of short reads. Use the .tsv output files to create a bubble chart showing relative species abundance across any number of samples.",
     "available": true,
@@ -10,7 +10,7 @@
     "defaultMaxRunTime": "12:00:00",
     "defaultNodeCount": 1,
     "defaultQueue": "normal",
-    "deploymentPath": "kyclark/applications/centrifuge-bubble-0.0.4/stampede",
+    "deploymentPath": "kyclark/applications/centrifuge-bubble-0.0.5/stampede",
     "deploymentSystem": "data.iplantcollaborative.org",
     "executionSystem": "tacc-stampede2-kyclark",
     "executionType": "HPC",

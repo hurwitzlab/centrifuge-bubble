@@ -1,6 +1,6 @@
-.PHONY: clean up app test job jobs-template jobs-submit stest
+.PHONY: clean up app test job template stest
 
-APP = centrifuge-bubble-0.0.3
+APP = centrifuge-bubble-0.0.5
 EMAIL = kyclark@email.arizona.edu
 
 clean:
@@ -18,11 +18,8 @@ test: clean
 job:
 	jobs-submit -F job.json
 
-jobs-template:
-	jobs-template $(APP) > job.json
-
-jobs-submit:
-	jobs-submit -F job.json
+template:
+	jobs-template -A $(APP) > job.json
 
 stest:
 	run.sh -d test/reports -o test-out -e "Homo sapiens, synthetic construct" -t "Pacific Ocean Virome"
