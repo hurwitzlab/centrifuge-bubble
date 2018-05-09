@@ -50,19 +50,27 @@ option_list = list(
     c("-t", "--title"),
     default = 'bubble',
     type = "character",
-    help = "plot title",
+    help = "Plot title",
     metavar = "character"
+  ),
+  make_option(
+    c("-m", "--max_species"),
+    default = 1000,
+    type = "integer",
+    help = "Max number of species",
+    metavar = "int"
   )
 );
 
-opt.parser = OptionParser(option_list = option_list);
-opt        = parse_args(opt.parser);
-cent.dir   = opt$dir
-out.dir    = opt$outdir
-file.name  = opt$outfile
-plot.title = opt$title
-min.prop   = opt$proportion
-exclude    = unlist(strsplit(opt$exclude,"[[:space:]]*,[[:space:]]*"))
+opt.parser  = OptionParser(option_list = option_list);
+opt         = parse_args(opt.parser);
+cent.dir    = opt$dir
+out.dir     = opt$outdir
+file.name   = opt$outfile
+plot.title  = opt$title
+min.prop    = opt$proportion
+max.species = opt$max_species
+exclude     = unlist(strsplit(opt$exclude,"[[:space:]]*,[[:space:]]*"))
 
 #
 # SETWD: Location of centrifuge_report.tsv files. 
@@ -122,16 +130,15 @@ props = lapply(all.data, function(x) {
 #
 final    = llply(props, subset, proportion > min.prop)
 df       = ldply(final, data.frame)
-num_orgs = nrow(df)
+num.orgs = nrow(df)
 
 printf("At a proportion of %s, %s sample%s were included.\n",
-       min.prop, num_orgs, if (num_orgs==1) '' else 's')
+       min.prop, num.orgs, if (num.orgs==1) '' else 's')
 
-max_orgs = 1000
-if (num_orgs > max_orgs) {
-  printf("That is too many (max %s), I have to trim it down\n", max_orgs)
-  df = df[1:max_orgs,]
-} else if (num_orgs == 0) {
+if (max.species > 0 && num.orgs > max.species) {
+  printf("That is too many (max %s), I have to trim it down\n", max.species)
+  df = df[1:max.species, ]
+} else if (num.orgs == 0) {
   stop("There is nothing to show")
 }
 

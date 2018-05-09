@@ -88,7 +88,7 @@
                 "validator": ""
             },
             "details": {
-                "description": "Comma-separated list of species to exclude",
+                "description": "Comma-separated list of species names to exclude",
                 "label": "Exclude species",
                 "argument": "-e ",
                 "repeatArgument": false,
@@ -110,6 +110,25 @@
                 "description": "Minimum proportion to be included",
                 "label": "Min. proportion",
                 "argument": "-p ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "MAX_SPECIES",
+            "value": {
+                "default": "",
+                "type": "string",
+                "order": 4,
+                "required": true,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "",
+                "label": "Maximum num. species",
+                "argument": "-m ",
                 "repeatArgument": false,
                 "showArgument": true
             }
