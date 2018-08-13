@@ -7,6 +7,7 @@ suppressMessages(library("optparse"))
 suppressMessages(library("plyr"))
 suppressMessages(library("ggplot2"))
 suppressMessages(library("R.utils"))
+suppressMessages(library("tools"))
 
 args = commandArgs(trailingOnly=TRUE)
 
@@ -72,6 +73,10 @@ min.prop    = opt$proportion
 max.species = opt$max_species
 exclude     = unlist(strsplit(opt$exclude,"[[:space:]]*,[[:space:]]*"))
 
+if (min.prop > 1) {
+  min.prop = min.prop / 100
+}
+
 #
 # SETWD: Location of centrifuge_report.tsv files. 
 # Should all be in same directory
@@ -80,15 +85,14 @@ if (nchar(cent.dir) == 0) {
   stop("--dir is required");
 }
 
-if (!dir.exists(cent.dir)) {
+if (file.exists(cent.dir) & file_ext(cent.dir) == "tsv") {
+  tsv.files = c(cent.dir)
+} else if (dir.exists(cent.dir)) {
+  tsv.files = list.files(path = cent.dir, pattern = "*.tsv", full.names = T)
+} else {
   stop(paste("Bad centrifuge directory: ", cent.dir))
 }
 
-if (min.prop > 1) {
-  min.prop = min.prop / 100
-}
-
-tsv.files = list.files(path = cent.dir, pattern = "*.tsv", full.names = T)
 num.files = length(tsv.files)
 
 if (num.files == 0) {
@@ -163,8 +167,11 @@ bplot = ggplot(df, aes(as.factor(sample), as.factor(name))) +
         legend.position = "bottom",
         axis.text.x = element_text(angle = 45, hjust = 1))
 
-ggsave(filename=file.path(out.dir, paste0(file.name, ".png")), plot=bplot, 
-       width = width, height = height, units="in")
+ggsave(filename=file.path(out.dir, paste0(file.name, ".png")), 
+       plot=bplot, 
+       width = width, 
+       height = height, 
+       units="in")
 
 write.csv(df, file = file.path(out.dir, paste0(file.name, ".csv")))
 printf("Done, see %s\n", out.dir)
