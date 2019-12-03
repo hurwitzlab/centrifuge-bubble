@@ -1,1 +1,4 @@
 *.img
+.mypy_cache
+bubble.png
+bubble.csv
