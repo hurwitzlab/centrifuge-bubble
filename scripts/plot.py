@@ -25,10 +25,10 @@ def get_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('file',
-                        metavar='FILE',
-                        type=argparse.FileType('r'),
+                        metavar='FILE_OR_DIR',
+                        type=str,
                         nargs='+',
-                        help='Centrifuge .tsv file(s)')
+                        help='Centrifuge .tsv file(s) or directory')
 
     parser.add_argument('-r',
                         '--rank',
@@ -45,7 +45,7 @@ def get_args():
                         help='Minimum percentage',
                         metavar='float',
                         type=float,
-                        default=0.)
+                        default=0.01)
 
     parser.add_argument('-M',
                         '--multiplier',
@@ -122,7 +122,7 @@ def parse_files(files: List[TextIO], rank_wanted: str, exclude: List[str],
     is_virus = lambda name: re.search('(phage|virus)', name, re.IGNORECASE)
 
     assigned = {}
-    for i, fh in enumerate(files, start=1):
+    for i, fh in enumerate(map(open, files), start=1):
         print('{:3}: {}'.format(i, fh.name))
 
         sample, _ = os.path.splitext(os.path.basename(fh.name))
@@ -193,11 +193,27 @@ def parse_files(files: List[TextIO], rank_wanted: str, exclude: List[str],
 
 
 # --------------------------------------------------
+def find_files(entries):
+    """Find files"""
+
+    files = []
+    for entry in entries:
+        if os.path.isfile(entry) and entry.endswith('.tsv'):
+            files.append(entry)
+        elif os.path.isdir(entry):
+            contents = map(lambda f: os.path.join(entry, f), os.listdir(entry))
+            files.extend(find_files(contents))
+
+    return files
+
+
+# --------------------------------------------------
 def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    data = parse_files(args.file, args.rank, args.exclude, args.min)
+    files = find_files(args.file)
+    data = parse_files(files, args.rank, args.exclude, args.min)
 
     num_found = len(data)
     print('Found {} at min {}%'.format(num_found, args.min))
