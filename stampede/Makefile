@@ -1,6 +1,6 @@
 .PHONY: clean up app test job template stest
 
-APP = centrifuge-bubble-0.0.5
+APP = centrifuge-bubble-0.0.6
 EMAIL = kyclark@email.arizona.edu
 
 clean:
@@ -16,7 +16,7 @@ test: clean
 	sbatch test.sh
 
 job:
-	jobs-submit -F job.json
+	tapis jobs submit -F job.json
 
 template:
 	jobs-template -A $(APP) > job.json

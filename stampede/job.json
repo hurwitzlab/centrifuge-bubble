@@ -1,26 +1,24 @@
 {
-  "name":"centrifuge-bubble test-1525885481",
-  "appId": "centrifuge-bubble-0.0.5",
+  "name":"centrifuge-bubble-test",
+  "appId": "centrifuge-bubble-0.0.6",
   "batchQueue": "normal",
-  "executionSystem": "tacc-stampede2-kyclark",
-  "maxRunTime": "12:00:00",
+  "maxRunTime": "02:00:00",
   "memoryPerNode": "32GB",
   "nodeCount": 1,
   "processorsPerNode": 16,
   "archive": true,
   "archiveSystem": "data.iplantcollaborative.org",
-  "archivePath": null,
   "inputs": {
-    "CENTRIFUGE_DIR": "kyclark/data/dolphin/reports"
+    "QUERY": [ "kyclark/data/dolphin/reports" ]
   },
   "parameters": {
-    "TITLE": "Dolphin",
-    "EXCLUDE_SPECIES": "",
+    "TITLE": "Dolphin Blowhole",
+    "EXCLUDE_SPECIES": "synthetic construct, Homo sapiens",
     "MIN_PROPORTION": "0.02"
   },
   "notifications": [
     {
-      "url":"https://requestbin.agaveapi.co/snzx9lso?job_id=${JOB_ID}&status=${JOB_STATUS}",
+      "url":"https://requestbin.agaveapi.co/?job_id=${JOB_ID}&status=${JOB_STATUS}",
       "event":"*",
       "persistent":true
     },
