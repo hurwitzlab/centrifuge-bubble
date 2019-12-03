@@ -9,6 +9,7 @@ import argparse
 import csv
 import os
 import re
+import sys
 import pandas as pd
 import matplotlib.pyplot as plt
 from functools import partial
@@ -24,7 +25,8 @@ def get_args():
         description='Plot Centrifuge out',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('file',
+    parser.add_argument('-q',
+                        '--query',
                         metavar='FILE_OR_DIR',
                         type=str,
                         nargs='+',
@@ -212,7 +214,7 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    files = find_files(args.file)
+    files = find_files(args.query)
     data = parse_files(files, args.rank, args.exclude, args.min)
 
     num_found = len(data)
