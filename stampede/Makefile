@@ -1,19 +1,8 @@
-.PHONY: clean up app test job template stest
-
-APP = centrifuge-bubble-0.0.6
-EMAIL = kyclark@email.arizona.edu
-
-clean:
-	find . \( -name \*.out -o -name \*.param \) -exec rm {} \;
-
-up: clean
+up:
 	copy_from_manifest.py
 
 app:
-	apps-addupdate -F app.json
-
-test: clean
-	sbatch test.sh
+	tapis apps create -F app.json
 
 job:
 	tapis jobs submit -F job.json
